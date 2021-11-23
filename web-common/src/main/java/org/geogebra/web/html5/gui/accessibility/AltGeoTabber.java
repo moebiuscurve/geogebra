@@ -27,7 +27,7 @@ public class AltGeoTabber implements MayHaveFocus {
 		altGeo = getAltGeo();
 		if (hasInvisibleAltGeo()) {
 			GeoText altText = (GeoText) altGeo;
-			view.getScreenReader().readText(altText.getText().getTextString());
+			view.getScreenReader().readText(altText.getAuralText());
 			focus = true;
 			return true;
 		}
