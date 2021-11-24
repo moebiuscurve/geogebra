@@ -18,11 +18,11 @@ import org.geogebra.common.main.SelectionManager;
 public class AccessibilityManagerW implements AccessibilityManagerInterface {
 	private final GeoTabber geoTabber;
 	private final AltGeoTabber altGeoTabber;
-	private App app;
-	private SelectionManager selection;
+	private final App app;
+	private final SelectionManager selection;
 	private MayHaveFocus anchor;
 	private SideBarAccessibilityAdapter menuContainer;
-	private TreeSet<MayHaveFocus> components = new TreeSet<>(new Comparator<MayHaveFocus>() {
+	private final TreeSet<MayHaveFocus> components = new TreeSet<>(new Comparator<MayHaveFocus>() {
 		@Override
 		public int compare(MayHaveFocus o1, MayHaveFocus o2) {
 			int viewDiff = o1.getAccessibilityGroup().ordinal()
@@ -47,7 +47,7 @@ public class AccessibilityManagerW implements AccessibilityManagerInterface {
 		this.app = app;
 		selection = app.getSelectionManager();
 		this.geoTabber = new GeoTabber(app);
-		altGeoTabber = new AltGeoTabber(app.getActiveEuclidianView());
+		altGeoTabber = new AltGeoTabber(app);
 		components.add(altGeoTabber);
 		components.add(geoTabber);
 		components.add(new PlayButtonTabber(app.getActiveEuclidianView()));
@@ -201,6 +201,6 @@ public class AccessibilityManagerW implements AccessibilityManagerInterface {
 
 	@Override
 	public GeoElement getAltGeoForView() {
-		return altGeoTabber.getAltGeo();
+		return altGeoTabber.getAltGeo(app.getActiveEuclidianView().getEuclidianViewNo());
 	}
 }
