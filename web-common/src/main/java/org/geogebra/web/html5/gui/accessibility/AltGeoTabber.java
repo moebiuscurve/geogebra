@@ -1,9 +1,10 @@
 package org.geogebra.web.html5.gui.accessibility;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.ScreenReaderAdapter;
 import org.geogebra.common.gui.AccessibilityGroup;
 import org.geogebra.common.gui.MayHaveFocus;
@@ -13,16 +14,19 @@ import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.main.App;
 
 public class AltGeoTabber implements MayHaveFocus {
+	private static final List<Integer> views = Arrays.asList(App.VIEW_EUCLIDIAN,
+			App.VIEW_EUCLIDIAN2, App.VIEW_EUCLIDIAN3D);
 	private static final Map<Integer, String>
 			ALT_TEXTS = new HashMap<>();
 	private final Kernel kernel;
-	private final App app;
+	private final ScreenReaderAdapter screenReader;
 	private GeoElement altGeo;
 	private boolean focus = false;
+	private int viewIndex = 0;
 	static {
-		ALT_TEXTS.put(1, "altText");
-		ALT_TEXTS.put(2, "altText2");
-		ALT_TEXTS.put(3, "altText3D");
+		ALT_TEXTS.put(App.VIEW_EUCLIDIAN, "altText");
+		ALT_TEXTS.put(App.VIEW_EUCLIDIAN2, "altText2");
+		ALT_TEXTS.put(App.VIEW_EUCLIDIAN3D, "altText3D");
 	}
 
 	/**
@@ -30,21 +34,32 @@ public class AltGeoTabber implements MayHaveFocus {
 	 */
 	public AltGeoTabber(App app) {
 		kernel = app.getKernel();
-		this.app = app;
+		screenReader = app.getActiveEuclidianView().getScreenReader();
 	}
 
 	@Override
 	public boolean focusIfVisible(boolean reverse) {
-		EuclidianView view = app.getActiveEuclidianView();
-		altGeo = getAltGeo(view.getEuclidianViewNo());
+		viewIndex = 0;
+		if (readNextView())  {
+			return focus;
+		}
+		return false;
+	}
 
-		if (hasInvisibleAltGeo()) {
-			readText(view.getScreenReader(), altGeo);
-			focus = true;
+	private boolean readNextView() {
+		if (viewIndex >= 0 && viewIndex < views.size()) {
+			readAltTextForView(ALT_TEXTS.get(views.get(viewIndex)));
 			return true;
 		}
-
 		return false;
+	}
+
+	private void readAltTextForView(String altTextId) {
+		altGeo = getAltGeo(altTextId);
+		if (hasInvisibleAltGeo()) {
+			readText(screenReader, altGeo);
+			focus = true;
+		}
 	}
 
 	private boolean hasInvisibleAltGeo() {
@@ -65,14 +80,16 @@ public class AltGeoTabber implements MayHaveFocus {
 
 	@Override
 	public boolean focusNext() {
-		focus = false;
-		return false;
+		viewIndex++;
+		focus = readNextView();
+		return focus;
 	}
 
 	@Override
 	public boolean focusPrevious() {
-		focus = false;
-		return false;
+		viewIndex--;
+		focus = readNextView();
+		return focus;
 	}
 
 	@Override
@@ -88,9 +105,13 @@ public class AltGeoTabber implements MayHaveFocus {
 	/**
 	 * @return the element with the name ("altText" + viewNumber), or "altText",
 	 * if it exists
-	 * @param viewNumber the id of the actual euclidian view.
+	 * @param altTextId the id of the actual euclidian view.
 	 */
-	public GeoElement getAltGeo(int viewNumber) {
-		return kernel.lookupLabel(ALT_TEXTS.getOrDefault(viewNumber, ALT_TEXTS.get(1)));
+	public GeoElement getAltGeo(String altTextId) {
+		return kernel.lookupLabel(altTextId);
+	}
+
+	public GeoElement getAltGeo(int euclidianViewNo) {
+		return getAltGeo(ALT_TEXTS.get(euclidianViewNo));
 	}
 }
