@@ -20,6 +20,7 @@ public class AltGeoTabber implements MayHaveFocus {
 			ALT_TEXTS = new HashMap<>();
 	private final Kernel kernel;
 	private final ScreenReaderAdapter screenReader;
+	private final App app;
 	private GeoElement altGeo;
 	private boolean focus = false;
 	private int viewIndex = 0;
@@ -35,6 +36,7 @@ public class AltGeoTabber implements MayHaveFocus {
 	public AltGeoTabber(App app) {
 		kernel = app.getKernel();
 		screenReader = app.getActiveEuclidianView().getScreenReader();
+		this.app = app;
 	}
 
 	@Override
@@ -47,11 +49,18 @@ public class AltGeoTabber implements MayHaveFocus {
 	}
 
 	private boolean readNextView() {
-		if (viewIndex >= 0 && viewIndex < views.size()) {
+		nextVisibleViewIndex();
+		if (viewIndex < views.size()) {
 			readAltTextForView(ALT_TEXTS.get(views.get(viewIndex)));
 			return true;
 		}
 		return false;
+	}
+
+	private void nextVisibleViewIndex() {
+		while (viewIndex < views.size() && !app.showView(views.get(viewIndex))) {
+			viewIndex++;
+		}
 	}
 
 	private void readAltTextForView(String altTextId) {
