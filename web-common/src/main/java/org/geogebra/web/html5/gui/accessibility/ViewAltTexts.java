@@ -1,9 +1,11 @@
 package org.geogebra.web.html5.gui.accessibility;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.geos.GeoElement;
@@ -16,6 +18,7 @@ public class ViewAltTexts {
 			App.VIEW_EUCLIDIAN3D);
 	private static final Map<Integer, String>
 			ALT_TEXTS = new HashMap<>();
+	private List<Integer> visibleViews;
 	static {
 		ALT_TEXTS.put(App.VIEW_EUCLIDIAN, "altText");
 		ALT_TEXTS.put(App.VIEW_EUCLIDIAN2, "altText2");
@@ -29,18 +32,19 @@ public class ViewAltTexts {
 	public ViewAltTexts(App app) {
 		this.app = app;
 		kernel = app.getKernel();
+		visibleViews = new ArrayList<>();
 	}
 
 	public int viewCount() {
-		return views.size();
+		return visibleViews.size();
+	}
+
+	public void update() {
+		visibleViews = views.stream().filter(app::showView).collect(Collectors.toList());
 	}
 
 	public String get(int index) {
-		return ALT_TEXTS.get(views.get(index));
-	}
-
-	public boolean isViewHidden(int index) {
-		return !app.showView(views.get(index));
+		return ALT_TEXTS.get(visibleViews.get(index));
 	}
 
 	/**
