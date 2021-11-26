@@ -41,7 +41,7 @@ public class AltGeoTabber implements MayHaveFocus {
 
 	@Override
 	public boolean focusIfVisible(boolean reverse) {
-		viewIndex = 0;
+		viewIndex = reverse ? views.size() - 1 : 0;
 		if (readNextView())  {
 			return focus;
 		}
@@ -51,16 +51,24 @@ public class AltGeoTabber implements MayHaveFocus {
 	private boolean readNextView() {
 		nextVisibleViewIndex();
 		if (viewIndex < views.size()) {
-			readAltTextForView(ALT_TEXTS.get(views.get(viewIndex)));
+			readCurrentAltText();
 			return true;
 		}
 		return false;
 	}
 
+	private void readCurrentAltText() {
+		readAltTextForView(ALT_TEXTS.get(views.get(viewIndex)));
+	}
+
 	private void nextVisibleViewIndex() {
-		while (viewIndex < views.size() && !app.showView(views.get(viewIndex))) {
+		while (viewIndex < views.size() && isViewHidden()) {
 			viewIndex++;
 		}
+	}
+
+	private boolean isViewHidden() {
+		return !app.showView(views.get(viewIndex));
 	}
 
 	private void readAltTextForView(String altTextId) {
@@ -97,8 +105,23 @@ public class AltGeoTabber implements MayHaveFocus {
 	@Override
 	public boolean focusPrevious() {
 		viewIndex--;
-		focus = readNextView();
+		focus = readPreviousView();
 		return focus;
+	}
+
+	private boolean readPreviousView() {
+		previousVisibleViewIndex();
+		if (viewIndex >= 0) {
+			readCurrentAltText();
+			return true;
+		}
+		return false;
+	}
+
+	private void previousVisibleViewIndex() {
+		while (viewIndex >= 0 && isViewHidden()) {
+			viewIndex--;
+		}
 	}
 
 	@Override
