@@ -140,7 +140,7 @@ public class EuclidianViewW extends EuclidianView implements
 	private String currentAltText;
 
 	// needed to make sure outline doesn't get dashed
-	private GBasicStroke outlineStroke = AwtFactory.getPrototype()
+	private final GBasicStroke outlineStroke = AwtFactory.getPrototype()
 			.newBasicStroke(3, GBasicStroke.CAP_BUTT, GBasicStroke.JOIN_BEVEL);
 
 	/**
@@ -1087,14 +1087,13 @@ public class EuclidianViewW extends EuclidianView implements
 	}
 
 	@Override
-	public void setAltText() {
-		GeoElement altGeo = appW.getAccessibilityManager().getAltGeoForView();
+	public void setAltText(GeoText altGeo) {
 		if (altGeo == null) {
 			return;
 		}
 		String content = getAltTextFrom(altGeo);
 
-		if (content != null && !content.equals(currentAltText) && altGeo.isGeoText()) {
+		if (content != null && !content.equals(currentAltText)) {
 			getScreenReader().readText(content);
 			currentAltText = content;
 		}
@@ -1312,7 +1311,7 @@ public class EuclidianViewW extends EuclidianView implements
 
 	private class DrawLaTeXCallBack implements Runnable {
 
-		private GeoElementND geo;
+		private final GeoElementND geo;
 
 		public DrawLaTeXCallBack(GeoElementND geo) {
 			this.geo = geo;

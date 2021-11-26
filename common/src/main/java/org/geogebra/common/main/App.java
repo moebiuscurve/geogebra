@@ -88,6 +88,7 @@ import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoList;
 import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoPriorityComparator;
+import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.kernel.geos.NotesPriorityComparator;
 import org.geogebra.common.kernel.geos.description.DefaultLabelDescriptionConverter;
 import org.geogebra.common.kernel.geos.description.ProtectiveLabelDescriptionConverter;
@@ -605,11 +606,7 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 			return true;
 		}
 
-		if (id == App.VIEW_EUCLIDIAN3D_2) {
-			return true;
-		}
-
-		return false;
+		return id == App.VIEW_EUCLIDIAN3D_2;
 
 	}
 
@@ -1634,8 +1631,8 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		}
 		String allXml = getXML();
 		String header = allXml.substring(0, allXml.indexOf("<construction"));
-		String footer = allXml.substring(allXml.indexOf("</construction>"),
-				allXml.length());
+		String footer = allXml.substring(allXml.indexOf("</construction>")
+		);
 		StringBuilder sb = new StringBuilder();
 		editMacro.getXML(sb);
 		String macroXml = sb.toString();
@@ -4006,8 +4003,9 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 
 	/**
 	 * Update graphics view alt text.
+	 * @param geoText
 	 */
-	public void setAltText() {
+	public void setAltText(GeoText geoText) {
 		// ignored in desktop
 	}
 
@@ -4219,7 +4217,7 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	}
 
 	public interface ViewCallback {
-		public void run(int viewID, String viewName);
+		void run(int viewID, String viewName);
 	}
 
 	final public boolean loadXML(byte[] zipFile) {

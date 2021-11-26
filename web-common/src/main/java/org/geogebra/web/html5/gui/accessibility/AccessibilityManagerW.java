@@ -198,6 +198,6 @@ public class AccessibilityManagerW implements AccessibilityManagerInterface {
 
 	@Override
 	public GeoElement getAltGeoForView() {
-		return altGeoTabber.getAltGeo(app.getActiveEuclidianView().getEuclidianViewNo());
+		return altGeoTabber.getAltGeo();
 	}
 }

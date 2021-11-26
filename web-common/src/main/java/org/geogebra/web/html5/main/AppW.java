@@ -39,6 +39,7 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoElementGraphicsAdapter;
 import org.geogebra.common.kernel.geos.GeoImage;
 import org.geogebra.common.kernel.geos.GeoNumeric;
+import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.DialogManager;
 import org.geogebra.common.main.FontManager;
@@ -212,7 +213,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	private boolean toolLoadedFromStorage;
 	private BrowserStorage storage;
 	private boolean keyboardNeeded;
-	private ArrayList<ViewsChangedListener> viewsChangedListener = new ArrayList<>();
+	private final ArrayList<ViewsChangedListener> viewsChangedListener = new ArrayList<>();
 	private GDimension preferredSize;
 	private NetworkOperation networkOperation;
 	private PageListControllerInterface pageController;
@@ -228,10 +229,10 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	HashMap<String, String> revTranslateCommandTable = new HashMap<>();
 	private Runnable closeBroserCallback;
 	private Runnable insertImageCallback;
-	private ArrayList<MouseTouchGestureControllerW> euclidianHandlers = new ArrayList<>();
+	private final ArrayList<MouseTouchGestureControllerW> euclidianHandlers = new ArrayList<>();
 	private ViewW viewW;
 	private ZoomPanel zoomPanel;
-	private PopupRegistry popupRegistry = new PopupRegistry();
+	private final PopupRegistry popupRegistry = new PopupRegistry();
 	private VendorSettings vendorSettings;
 	private DefaultSettings defaultSettings;
 	private FpsProfiler fpsProfiler;
@@ -1391,7 +1392,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		String fn = imgFileName;
 		int index = imgFileName.lastIndexOf('/');
 		if (index != -1) {
-			fn = fn.substring(index + 1, fn.length()); // filename without
+			fn = fn.substring(index + 1); // filename without
 		}
 		// path
 		fn = org.geogebra.common.util.Util.processFilename(fn);
@@ -1456,7 +1457,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 		FileReader reader = new FileReader();
 		reader.addEventListener("load", (event) -> {
-			if (reader.readyState == reader.DONE) {
+			if (reader.readyState == FileReader.DONE) {
 				String fileStr = reader.result.asString();
 				String fileName = fileToHandle.name;
 				imageDropHappened(fileName, fileStr);
@@ -2822,23 +2823,11 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	 */
 	public abstract Panel getPanel();
 
-	private Timer altTextTimer = new Timer() {
-
-		@Override
-		public void run() {
-			getEuclidianView1().setAltText();
-			if (hasEuclidianView2(1)) {
-				getEuclidianView2(1).setAltText();
-			}
-			if (isEuclidianView3Dinited()) {
-				((EuclidianViewWInterface) getEuclidianView3D()).setAltText();
-			}
-		}
-	};
+	private final AltTextTimer altTextTimer = new AltTextTimer(this);
 
 	@Override
-	public void setAltText() {
-		altTextTimer.schedule(700);
+	public void setAltText(GeoText altText) {
+		altTextTimer.schedule(altText, 700);
 	}
 
 	@Override
