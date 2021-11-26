@@ -11,40 +11,45 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.main.App;
 
+/**
+ * Class to provide the access of altTexts for the visible views
+ * @author laszlo
+ */
 public class ViewAltTexts {
-	private static final List<Integer> views = Arrays.asList(
+	private static final List<Integer> availableViews = Arrays.asList(
 			App.VIEW_EUCLIDIAN,
 			App.VIEW_EUCLIDIAN2,
 			App.VIEW_EUCLIDIAN3D);
 	private static final HashMap<Integer, String>
-			ALT_TEXTS = new HashMap<>();
+			altTextsPerView = new HashMap<>();
 	private List<Integer> visibleViews;
+
 	static {
-		ALT_TEXTS.put(App.VIEW_EUCLIDIAN, "altText");
-		ALT_TEXTS.put(App.VIEW_EUCLIDIAN2, "altText2");
-		ALT_TEXTS.put(App.VIEW_EUCLIDIAN3D, "altText3D");
+		altTextsPerView.put(App.VIEW_EUCLIDIAN, "altText");
+		altTextsPerView.put(App.VIEW_EUCLIDIAN2, "altText2");
+		altTextsPerView.put(App.VIEW_EUCLIDIAN3D, "altText3D");
 	}
 
 	private final Kernel kernel;
 
 	private final App app;
 
+	/**
+	 *
+	 * @param app the application
+	 */
 	public ViewAltTexts(App app) {
 		this.app = app;
 		kernel = app.getKernel();
 		visibleViews = new ArrayList<>();
 	}
 
-	public int viewCount() {
+	int viewCount() {
 		return visibleViews.size();
 	}
 
-	public void updateVisibleViews() {
-		visibleViews = views.stream().filter(app::showView).collect(Collectors.toList());
-	}
-
-	public String get(int index) {
-		return ALT_TEXTS.get(visibleViews.get(index));
+	void updateVisibleViews() {
+		visibleViews = availableViews.stream().filter(app::showView).collect(Collectors.toList());
 	}
 
 	/**
@@ -59,6 +64,9 @@ public class ViewAltTexts {
 				: geoElement;
 	}
 
+	private String get(int index) {
+		return altTextsPerView.get(visibleViews.get(index));
+	}
 
 	/**
 	 *
@@ -69,7 +77,7 @@ public class ViewAltTexts {
 		updateVisibleViews();
 		String label = altText.getLabelSimple();
 		for (Integer viewId: visibleViews) {
-			if (ALT_TEXTS.get(viewId).equals(label)) {
+			if (altTextsPerView.get(viewId).equals(label)) {
 				return true;
 			}
 		}

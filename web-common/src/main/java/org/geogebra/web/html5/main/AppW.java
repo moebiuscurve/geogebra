@@ -2823,11 +2823,10 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	 */
 	public abstract Panel getPanel();
 
-	private final AltTextTimer altTextTimer = new AltTextTimer(this);
-
 	@Override
 	public void setAltText(GeoText altText) {
 		if (accessibilityManager.isAltTextValid(altText)) {
+			AltTextTimer altTextTimer = new AltTextTimer(this);
 			altTextTimer.schedule(altText, 700);
 		}
 	}

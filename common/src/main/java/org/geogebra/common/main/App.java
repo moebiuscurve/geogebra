@@ -4003,7 +4003,7 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 
 	/**
 	 * Update graphics view alt text.
-	 * @param geoText
+	 * @param geoText to set
 	 */
 	public void setAltText(GeoText geoText) {
 		// ignored in desktop

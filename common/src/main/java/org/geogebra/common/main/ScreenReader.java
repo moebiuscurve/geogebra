@@ -553,9 +553,6 @@ public class ScreenReader {
 	 *            debug string with a prefix (for console filter)
 	 */
 	public static void debug(String text) {
-		if (text.contains("from")) {
-			Log.debug("stop!");
-		}
 		Log.debug("read text: " + text);
 	}
 

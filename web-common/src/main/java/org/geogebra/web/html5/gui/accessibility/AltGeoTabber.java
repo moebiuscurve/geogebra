@@ -12,6 +12,7 @@ public class AltGeoTabber implements MayHaveFocus {
 	private boolean focus = false;
 	private int viewIndex = 0;
 	private final ViewAltTexts altTexts;
+
 	/**
 	 * @param app the application
 	 */
@@ -50,7 +51,7 @@ public class AltGeoTabber implements MayHaveFocus {
 		if (!altGeo.isGeoText()) {
 			return;
 		}
-		screenReader.readText(((GeoText)altGeo).getAuralText());
+		screenReader.readText(((GeoText) altGeo).getAuralText());
 	}
 
 	@Override
