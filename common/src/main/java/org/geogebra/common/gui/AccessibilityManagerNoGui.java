@@ -1,6 +1,7 @@
 package org.geogebra.common.gui;
 
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoText;
 
 /**
  * Dummy implementation for desktop/mobile
@@ -73,5 +74,10 @@ public final class AccessibilityManagerNoGui
 	@Override
 	public GeoElement getAltGeoForView() {
 		return null;
+	}
+
+	@Override
+	public boolean isAltTextValid(GeoText altText) {
+		return false;
 	}
 }

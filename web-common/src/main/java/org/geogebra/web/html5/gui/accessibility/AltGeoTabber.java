@@ -15,14 +15,14 @@ public class AltGeoTabber implements MayHaveFocus {
 	/**
 	 * @param app the application
 	 */
-	public AltGeoTabber(App app) {
-		altTexts = new ViewAltTexts(app);
+	public AltGeoTabber(App app, ViewAltTexts altTexts) {
 		screenReader = app.getActiveEuclidianView().getScreenReader();
+		this.altTexts = altTexts;
 	}
 
 	@Override
 	public boolean focusIfVisible(boolean reverse) {
-		altTexts.update();
+		altTexts.updateVisibleViews();
 		viewIndex = reverse ? altTexts.viewCount() - 1 : 0;
 		if (readNextView())  {
 			return focus;

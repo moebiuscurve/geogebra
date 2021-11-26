@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import org.geogebra.common.gui.AccessibilityManagerInterface;
 import org.geogebra.common.gui.MayHaveFocus;
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.SelectionManager;
 
@@ -19,6 +20,7 @@ public class AccessibilityManagerW implements AccessibilityManagerInterface {
 	private final AltGeoTabber altGeoTabber;
 	private final App app;
 	private final SelectionManager selection;
+	private final ViewAltTexts altTexts;
 	private MayHaveFocus anchor;
 	private SideBarAccessibilityAdapter menuContainer;
 
@@ -44,7 +46,8 @@ public class AccessibilityManagerW implements AccessibilityManagerInterface {
 		this.app = app;
 		selection = app.getSelectionManager();
 		this.geoTabber = new GeoTabber(app);
-		altGeoTabber = new AltGeoTabber(app);
+		altTexts = new ViewAltTexts(app);
+		altGeoTabber = new AltGeoTabber(app, altTexts);
 		components.add(altGeoTabber);
 		components.add(geoTabber);
 		components.add(new PlayButtonTabber(app.getActiveEuclidianView()));
@@ -199,5 +202,10 @@ public class AccessibilityManagerW implements AccessibilityManagerInterface {
 	@Override
 	public GeoElement getAltGeoForView() {
 		return altGeoTabber.getAltGeo();
+	}
+
+	@Override
+	public boolean isAltTextValid(GeoText altText) {
+		return altTexts.isValid(altText);
 	}
 }

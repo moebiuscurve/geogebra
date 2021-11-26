@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.main.App;
 
 public class ViewAltTexts {
@@ -16,7 +16,7 @@ public class ViewAltTexts {
 			App.VIEW_EUCLIDIAN,
 			App.VIEW_EUCLIDIAN2,
 			App.VIEW_EUCLIDIAN3D);
-	private static final Map<Integer, String>
+	private static final HashMap<Integer, String>
 			ALT_TEXTS = new HashMap<>();
 	private List<Integer> visibleViews;
 	static {
@@ -39,7 +39,7 @@ public class ViewAltTexts {
 		return visibleViews.size();
 	}
 
-	public void update() {
+	public void updateVisibleViews() {
 		visibleViews = views.stream().filter(app::showView).collect(Collectors.toList());
 	}
 
@@ -57,5 +57,23 @@ public class ViewAltTexts {
 		return (geoElement == null || geoElement.isEuclidianVisible())
 				? null
 				: geoElement;
+	}
+
+
+	/**
+	 *
+	 * @param altText to check
+	 * @return if there is a view for the altText
+	 */
+	public boolean isValid(GeoText altText) {
+		updateVisibleViews();
+		String label = altText.getLabelSimple();
+		for (Integer viewId: visibleViews) {
+			if (ALT_TEXTS.get(viewId).equals(label)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

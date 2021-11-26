@@ -2827,7 +2827,9 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 	@Override
 	public void setAltText(GeoText altText) {
-		altTextTimer.schedule(altText, 700);
+		if (accessibilityManager.isAltTextValid(altText)) {
+			altTextTimer.schedule(altText, 700);
+		}
 	}
 
 	@Override
