@@ -1,9 +1,9 @@
 package org.geogebra.web.html5.css;
 
 import org.geogebra.web.resources.SVGResource;
+import org.gwtproject.resources.client.ClientBundle;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
 
 public interface ZoomPanelResources extends ClientBundle {
 	ZoomPanelResources INSTANCE = GWT.create(ZoomPanelResources.class);

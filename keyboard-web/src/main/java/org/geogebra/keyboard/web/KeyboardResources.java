@@ -1,10 +1,10 @@
 package org.geogebra.keyboard.web;
 
 import org.geogebra.web.resources.SVGResource;
+import org.gwtproject.resources.client.ClientBundle;
+import org.gwtproject.resources.client.ImageResource;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.ImageResource;
 
 /**
  * image and style resources of keyboard

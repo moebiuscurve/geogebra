@@ -1,9 +1,9 @@
 package org.geogebra.web.full.css;
 
 import org.geogebra.web.resources.SVGResource;
+import org.gwtproject.resources.client.ClientBundle;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
 
 /**
  * SVG icons for toolbar

@@ -2,9 +2,8 @@ package org.geogebra.web.resources;
 
 import org.geogebra.gwtutil.DOMParser;
 import org.geogebra.gwtutil.XMLSerializer;
-
-import com.google.gwt.safehtml.shared.SafeUri;
-import com.google.gwt.safehtml.shared.UriUtils;
+import org.gwtproject.safehtml.shared.SafeUri;
+import org.gwtproject.safehtml.shared.UriUtils;
 
 import elemental2.dom.CSSStyleDeclaration;
 import elemental2.dom.Document;
@@ -63,7 +62,6 @@ public class DefaultSVGResource implements SVGResource {
 		return serializer.serializeToString(doc);
 	}
 
-	@Override
 	public String getUrl() {
 		return "data:image/svg+xml;base64," + DomGlobal.btoa(svg);
 	}

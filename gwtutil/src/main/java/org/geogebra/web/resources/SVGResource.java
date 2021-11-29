@@ -18,19 +18,18 @@
 
 package org.geogebra.web.resources;
 
-import org.geogebra.web.generator.SVGResourceGenerator;
-
-import com.google.gwt.resources.client.DataResource;
-import com.google.gwt.resources.ext.DefaultExtensions;
-import com.google.gwt.resources.ext.ResourceGeneratorType;
-import com.google.gwt.safehtml.shared.SafeUri;
+import org.gwtproject.resources.client.DataResource;
+import org.gwtproject.resources.ext.DefaultExtensions;
+import org.gwtproject.resources.ext.ResourceGeneratorType;
+import org.gwtproject.resources.rg.TextResourceGenerator;
+import org.gwtproject.safehtml.shared.SafeUri;
 
 /**
  * A resource that contains SVG that should be incorporated into the compiled output. 
  * Based on https://github.com/laaglu/lib-gwt-svg but provides a small subset of functionality.
  */
 @DefaultExtensions({".svg"})
-@ResourceGeneratorType(SVGResourceGenerator.class)
+@ResourceGeneratorType(TextResourceGenerator.class)
 public interface SVGResource extends DataResource {
 
 	/**

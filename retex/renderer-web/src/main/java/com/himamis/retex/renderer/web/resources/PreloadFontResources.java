@@ -43,9 +43,10 @@
  */
 package com.himamis.retex.renderer.web.resources;
 
+import org.gwtproject.resources.client.ClientBundle;
+import org.gwtproject.resources.client.TextResource;
+
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;
 
 public interface PreloadFontResources extends ClientBundle {
 

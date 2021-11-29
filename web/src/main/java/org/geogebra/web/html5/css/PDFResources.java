@@ -1,8 +1,9 @@
 package org.geogebra.web.html5.css;
 
+import org.gwtproject.resources.client.ClientBundle;
+import org.gwtproject.resources.client.TextResource;
+
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.TextResource;
 
 public interface PDFResources extends ClientBundle {
 
