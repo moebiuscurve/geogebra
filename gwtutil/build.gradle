@@ -21,11 +21,12 @@ dependencies {
 
     compile group: 'org.gwtproject.resources', name: 'gwt-resources-api', version: '1.0-SNAPSHOT'
     compile group: 'org.gwtproject.resources', name: 'gwt-resources-core', version: '1.0-SNAPSHOT'
-    compile group: 'org.gwtproject.resources', name: 'gwt-resources-processor', version: '1.0-SNAPSHOT'
     compile 'org.gwtproject.timer:gwt-timer:1.0.0-RC1'
 
 // https://mvnrepository.com/artifact/com.google.auto.service/auto-service
     implementation group: 'com.google.auto.service', name: 'auto-service', version: '1.0.1'
+
+    annotationProcessor 'org.gwtproject.resources:gwt-resources-processor:1.0-SNAPSHOT'
 }
 
 pmd {

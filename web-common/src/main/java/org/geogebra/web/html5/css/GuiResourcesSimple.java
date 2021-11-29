@@ -29,7 +29,7 @@ public interface GuiResourcesSimple extends ClientBundle {
 	@Source("org/geogebra/web/resources/js/clipboard.js")
 	TextResource clipboardJs();
 
-	@Source("org/geogebra/common/icons/png/view_refresh.png")
+	@Source("view_refresh.png")
 	ImageResource viewRefresh();
 
 	@Source("org/geogebra/web/resources/images/spinner.gif")

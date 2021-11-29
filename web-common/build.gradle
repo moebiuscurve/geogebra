@@ -33,6 +33,8 @@ dependencies {
             "fr.ujf-grenoble:giac-gwt:$javaGiacVersion",
             "fr.ujf-grenoble:giac-gwt:$javaGiacVersion:sources",
             "com.google.gwt:gwt-dev:$gwtCompilerVersion"
+
+    annotationProcessor 'org.gwtproject.resources:gwt-resources-processor:1.0-SNAPSHOT'
 }
 
 spotbugs {
