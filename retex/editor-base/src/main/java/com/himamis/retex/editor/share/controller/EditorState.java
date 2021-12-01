@@ -211,11 +211,38 @@ public class EditorState {
 			if (array.isMatrix()) {
 				selectUpToRootComponent();
 			} else {
-				selectToStart();
+				selectListElement(array);
 			}
 		} else {
 			currentSelEnd = currentSelStart;
 		}
+	}
+
+	private void selectListElement(MathArray array) {
+		MathSequence sequence = array.getArgument(0);
+
+		currentSelStart = sequence.getArgument(firstSeparatorOnLeft(sequence));
+		currentSelEnd = sequence.getArgument(firstSeparatorOnRight(sequence));
+	}
+
+	private int firstSeparatorOnRight(MathSequence sequence) {
+		int i = currentOffset;
+		while (i < sequence.getArgumentCount()
+				&& !((MathCharacter)sequence.getArgument(i)).isSeparator()) {
+			i++;
+		}
+
+		return i - 1;
+	}
+
+	private int firstSeparatorOnLeft(MathSequence sequence) {
+		int i = currentOffset;
+		while (i > 0
+				&& !((MathCharacter)sequence.getArgument(i)).isSeparator()) {
+			i--;
+		}
+
+		return i == 0 ? 0 : i + 1;
 	}
 
 	private void selectUpToRootComponent() {
