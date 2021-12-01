@@ -199,15 +199,31 @@ public class EditorState {
 		} else {
 			currentSelStart = root;
 			currentSelEnd = currentSelStart;
+			anchor(true);
 		}
-		anchor(true);
 	}
 
 	private void selectProtectedContent() {
+		MathComponent first = rootComponent.getArgument(0);
 		currentSelStart = currentField.getArgument(0);
+		if (first instanceof MathArray) {
+			MathArray array = (MathArray) first;
+			if (array.isMatrix()) {
+				selectUpToRootComponent();
+			} else {
+				selectToStart();
+			}
+		} else {
+			currentSelEnd = currentSelStart;
+		}
+	}
+
+	private void selectUpToRootComponent() {
 		while (currentSelStart.getParent().getParent() != rootComponent) {
+			anchor(true);
 			currentSelStart = currentSelStart.getParent();
 		}
+
 		currentSelEnd = currentSelStart;
 	}
 
