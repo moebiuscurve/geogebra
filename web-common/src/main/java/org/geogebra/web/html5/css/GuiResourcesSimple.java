@@ -3,16 +3,12 @@ package org.geogebra.web.html5.css;
 import org.geogebra.web.resources.SVGResource;
 import org.gwtproject.resources.client.ClientBundle;
 import org.gwtproject.resources.client.ImageResource;
-import org.gwtproject.resources.client.Resource;
 import org.gwtproject.resources.client.TextResource;
 
-@Resource
 public interface GuiResourcesSimple extends ClientBundle {
 
-	GuiResourcesSimple INSTANCE = new GuiResourcesSimpleImpl();
+	GuiResourcesSimple INSTANCE = null;
 
-	@Source("org/geogebra/web/resources/js/rewrite_pHYs.min.js")
-	TextResource rewritePHYS();
 
 	@Source("org/geogebra/web/resources/js/xmlutil.js")
 	TextResource xmlUtil();
@@ -28,9 +24,6 @@ public interface GuiResourcesSimple extends ClientBundle {
 
 	@Source("org/geogebra/web/resources/js/clipboard.js")
 	TextResource clipboardJs();
-
-	@Source("view_refresh.png")
-	ImageResource viewRefresh();
 
 	@Source("org/geogebra/web/resources/images/spinner.gif")
 	ImageResource getGeoGebraWebSpinner();

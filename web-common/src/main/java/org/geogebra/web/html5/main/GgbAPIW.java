@@ -37,7 +37,7 @@ import org.geogebra.common.util.AsyncOperation;
 import org.geogebra.common.util.StringUtil;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.html5.Browser;
-import org.geogebra.web.html5.css.GuiResourcesSimple;
+import org.geogebra.web.html5.css.GuiResourcesTemp;
 import org.geogebra.web.html5.euclidian.EuclidianViewW;
 import org.geogebra.web.html5.euclidian.EuclidianViewWInterface;
 import org.geogebra.web.html5.export.ExportLoader;
@@ -202,7 +202,7 @@ public class GgbAPIW extends GgbAPI {
 		if (MyDouble.isFinite(dpi) && dpi > 0 && ev instanceof EuclidianViewW) {
 
 			JavaScriptInjector
-					.inject(GuiResourcesSimple.INSTANCE.rewritePHYS());
+					.inject(GuiResourcesTemp.INSTANCE.rewritePHYS());
 
 			url = addDPI(url, dpi);
 

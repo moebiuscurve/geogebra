@@ -19,7 +19,7 @@ import org.geogebra.web.full.gui.images.AppResources;
 import org.geogebra.web.full.gui.images.SvgPerspectiveResources;
 import org.geogebra.web.full.gui.util.Domvas;
 import org.geogebra.web.full.main.AppWFull;
-import org.geogebra.web.html5.css.GuiResourcesSimple;
+import org.geogebra.web.html5.css.GuiResourcesTemp;
 import org.geogebra.web.html5.gui.util.MathKeyboardListener;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
 import org.geogebra.web.html5.gui.zoompanel.ZoomPanel;
@@ -1118,7 +1118,7 @@ public abstract class DockPanelW extends ResizeComposite
 	 */
 	public void showResetIcon() {
 		StandardButton resetIcon = new StandardButton(
-				GuiResourcesSimple.INSTANCE.viewRefresh(), null, 24);
+				GuiResourcesTemp.INSTANCE.viewRefresh(), null, 24);
 		resetIcon.addFastClickHandler(source -> app.reset());
 		if (!app.allowStylebar()) {
 			dockControlPanel.clear();

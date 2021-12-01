@@ -80,6 +80,7 @@ import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.GeoGebraGlobal;
 import org.geogebra.web.html5.awt.GFontW;
 import org.geogebra.web.html5.css.GuiResourcesSimple;
+import org.geogebra.web.html5.css.GuiResourcesTemp;
 import org.geogebra.web.html5.euclidian.EuclidianControllerW;
 import org.geogebra.web.html5.euclidian.EuclidianPanelWAbstract;
 import org.geogebra.web.html5.euclidian.EuclidianViewW;
@@ -1956,7 +1957,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	 */
 	public HTMLImageElement getRefreshViewImage() {
 		HTMLImageElement imgE = ImageManagerW
-				.getInternalImage(GuiResourcesSimple.INSTANCE.viewRefresh());
+				.getInternalImage(GuiResourcesTemp.INSTANCE.viewRefresh());
 		imgE.addEventListener("load", (event) -> getActiveEuclidianView().updateBackground());
 		return imgE;
 	}
