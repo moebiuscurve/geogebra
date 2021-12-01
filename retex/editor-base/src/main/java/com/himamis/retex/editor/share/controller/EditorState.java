@@ -16,7 +16,7 @@ import com.himamis.retex.renderer.share.platform.FactoryProvider;
 
 public class EditorState {
 
-	private MetaModel metaModel;
+	private final MetaModel metaModel;
 	private MathSequence rootComponent;
 
 	private MathSequence currentField;
@@ -193,10 +193,24 @@ public class EditorState {
 	 * Select the whole formula
 	 */
 	public void selectAll() {
-		currentSelStart = getRootComponent();
-		currentSelEnd = currentSelStart;
+		MathSequence root = getRootComponent();
+		if (root.isProtected()) {
+			selectProtectedContent();
+		} else {
+			currentSelStart = root;
+			currentSelEnd = currentSelStart;
+		}
 		anchor(true);
 	}
+
+	private void selectProtectedContent() {
+		currentSelStart = currentField.getArgument(0);
+		while (currentSelStart.getParent().getParent() != rootComponent) {
+			currentSelStart = currentSelStart.getParent();
+		}
+		currentSelEnd = currentSelStart;
+	}
+
 
 	/**
 	 * Select from cursor position to end of current sub-formula
@@ -410,7 +424,7 @@ public class EditorState {
 							er.mathExpression(sb.reverse().toString()));
 				} catch (Exception e) {
 					FactoryProvider.getInstance()
-							.debug("Invalid: " + sb.reverse().toString());
+							.debug("Invalid: " + sb.reverse());
 				}
 			}
 		}

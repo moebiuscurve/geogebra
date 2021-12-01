@@ -195,6 +195,7 @@ public class InputController {
 	 */
 	public void newBraces(EditorState editorState, char ch) {
 		if (editorState.hasSelection()) {
+
 			editorState.cursorToSelectionStart();
 		}
 
@@ -528,7 +529,7 @@ public class InputController {
 		StringBuilder suffix = new StringBuilder(meta.getUnicodeString());
 
 		while (last instanceof MathCharacter) {
-			suffix.append(last.toString());
+			suffix.append(last);
 			if (!metaModel.isReverseSuffix(suffix.toString())) {
 				suffix.setLength(suffix.length() - 1);
 				break;
@@ -1241,19 +1242,13 @@ public class InputController {
 
 	private boolean preventDimensionChange(EditorState editorState) {
 		MathContainer parent = editorState.getCurrentField().getParent();
-		if (MathArray.isLocked(parent) && ((MathArray) parent).getOpenKey() == '(') {
-			return true;
-		}
-		return false;
+		return MathArray.isLocked(parent) && ((MathArray) parent).getOpenKey() == '(';
 	}
 
 	private boolean shouldMoveCursor(EditorState editorState) {
 		int offset = editorState.getCurrentOffset();
 		MathComponent next = editorState.getCurrentField().getArgument(offset);
-		if (next != null && ",".equals(next.toString())) {
-			return true;
-		}
-		return false;
+		return next != null && ",".equals(next.toString());
 	}
 
 	private boolean handleEndBlocks(EditorState editorState, char ch) {
@@ -1327,12 +1322,9 @@ public class InputController {
 			idx = editorState.getSelectionEnd().getParentIndex() + 1;
 		}
 		MathSequence field = editorState.getCurrentField();
-		if (field.getArgument(idx) instanceof MathCharacter
+		return field.getArgument(idx) instanceof MathCharacter
 				&& ",".equals(field.getArgument(idx).toString())
-				&& doSelectNext(field, editorState, idx + 1)) {
-			return true;
-		}
-		return false;
+				&& doSelectNext(field, editorState, idx + 1);
 	}
 
 	/**
@@ -1349,10 +1341,7 @@ public class InputController {
 		}
 
 		MathSequence field = editorState.getCurrentField();
-		if (idx == field.size() - 1 && doSelectNext(field, editorState, 0)) {
-			return true;
-		}
-		return false;
+		return idx == field.size() - 1 && doSelectNext(field, editorState, 0);
 	}
 
 	/**
