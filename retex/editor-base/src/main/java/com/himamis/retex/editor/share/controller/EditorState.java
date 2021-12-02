@@ -196,10 +196,8 @@ public class EditorState {
 		MathSequence root = getRootComponent();
 		if (root.isProtected()) {
 			selectProtectedContent();
-		} else {
-			currentSelStart = root;
-			currentSelEnd = currentSelStart;
-			anchor(true);
+		} else  {
+			selectListElement(root);
 		}
 	}
 
@@ -211,16 +209,14 @@ public class EditorState {
 			if (array.isMatrix()) {
 				selectUpToRootComponent();
 			} else {
-				selectListElement(array);
+				selectListElement(array.getArgument(0));
 			}
 		} else {
 			currentSelEnd = currentSelStart;
 		}
 	}
 
-	private void selectListElement(MathArray array) {
-		MathSequence sequence = array.getArgument(0);
-
+	private void selectListElement(MathSequence sequence) {
 		currentSelStart = sequence.getArgument(firstSeparatorOnLeft(sequence));
 		currentSelEnd = sequence.getArgument(firstSeparatorOnRight(sequence));
 	}
