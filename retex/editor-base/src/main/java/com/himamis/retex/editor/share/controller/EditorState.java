@@ -217,8 +217,12 @@ public class EditorState {
 	}
 
 	private void selectListElement(MathSequence sequence) {
-		currentSelStart = sequence.getArgument(firstSeparatorOnLeft(sequence));
-		currentSelEnd = sequence.getArgument(firstSeparatorOnRight(sequence));
+		MathSequence copy = sequence.size() == 1 && sequence.getArgument(0) instanceof MathArray
+				? ((MathArray) sequence.getArgument(0)).getArgument(0)
+				: sequence;
+
+		currentSelStart = copy.getArgument(firstSeparatorOnLeft(copy));
+		currentSelEnd = copy.getArgument(firstSeparatorOnRight(copy));
 	}
 
 	private int firstSeparatorOnRight(MathSequence sequence) {
