@@ -220,9 +220,21 @@ public class EditorState {
 		MathSequence copy = sequence.size() == 1 && sequence.getArgument(0) instanceof MathArray
 				? ((MathArray) sequence.getArgument(0)).getArgument(0)
 				: sequence;
+		if (currentField != sequence) {
+			MathComponent m = currentField;
+			MathContainer parent = currentField.getParent();
+			while (parent != sequence) {
+				m = parent;
+				parent = parent.getParent();
 
-		currentSelStart = copy.getArgument(firstSeparatorOnLeft(copy));
-		currentSelEnd = copy.getArgument(firstSeparatorOnRight(copy));
+			}
+			currentSelStart = m;
+			currentSelEnd = currentSelStart;
+		} else {
+			currentSelStart = copy.getArgument(firstSeparatorOnLeft(copy));
+			currentSelEnd = copy.getArgument(firstSeparatorOnRight(copy));
+
+		}
 	}
 
 	private int firstSeparatorOnRight(MathSequence sequence) {
