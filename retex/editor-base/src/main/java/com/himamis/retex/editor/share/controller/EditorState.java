@@ -217,44 +217,60 @@ public class EditorState {
 	}
 
 	private void selectListElement(MathSequence sequence) {
-		MathSequence copy = sequence.size() == 1 && sequence.getArgument(0) instanceof MathArray
-				? ((MathArray) sequence.getArgument(0)).getArgument(0)
-				: sequence;
 		if (currentField != sequence) {
-			MathComponent m = currentField;
-			MathContainer parent = currentField.getParent();
-			while (parent != sequence) {
-				m = parent;
-				parent = parent.getParent();
-
-			}
-			currentSelStart = m;
-			currentSelEnd = currentSelStart;
+			selectAllCompositeElement(sequence);
 		} else {
-			currentSelStart = copy.getArgument(firstSeparatorOnLeft(copy));
-			currentSelEnd = copy.getArgument(firstSeparatorOnRight(copy));
-
+			MathSequence content = sequenceWithoutBrackets(sequence);
+			currentSelStart = content.getArgument(firstSeparatorOnLeft(content));
+			currentSelEnd = content.getArgument(firstSeparatorOnRight(content));
 		}
 	}
 
+	private MathSequence sequenceWithoutBrackets(MathSequence sequence) {
+		return sequence.size() == 1 && sequence.getArgument(0) instanceof MathArray
+				? ((MathArray) sequence.getArgument(0)).getArgument(0)
+				: sequence;
+	}
+
+	private void selectAllCompositeElement(MathSequence sequence) {
+		MathComponent field = currentField;
+		MathContainer parent = currentField.getParent();
+		while (parent != sequence) {
+			field = parent;
+			parent = parent.getParent();
+
+		}
+		currentSelStart = field;
+		currentSelEnd = currentSelStart;
+	}
+
 	private int firstSeparatorOnRight(MathSequence sequence) {
+		if (isSeparatorAt(sequence, currentOffset)) {
+			return currentOffset - 1;
+		}
+
 		int i = currentOffset;
-		while (i < sequence.getArgumentCount()
-				&& !((MathCharacter)sequence.getArgument(i)).isSeparator()) {
+		while (i < sequence.getArgumentCount() && !isSeparatorAt(sequence, i)) {
 			i++;
 		}
 
 		return i - 1;
 	}
 
+	private boolean isSeparatorAt(MathSequence sequence, int index) {
+		MathComponent argument = sequence.getArgument(index);
+		return argument instanceof MathCharacter && ((MathCharacter)argument).isSeparator();
+	}
+
 	private int firstSeparatorOnLeft(MathSequence sequence) {
-		int i = currentOffset;
-		while (i > 0
-				&& !((MathCharacter)sequence.getArgument(i)).isSeparator()) {
-			i--;
+		int charIndex = isSeparatorAt(sequence, currentOffset)
+				? currentOffset - 1
+				: currentOffset;
+		while (charIndex > 0 && !isSeparatorAt(sequence, charIndex)) {
+			charIndex--;
 		}
 
-		return i == 0 ? 0 : i + 1;
+		return charIndex == 0 ? 0 : charIndex + 1;
 	}
 
 	private void selectUpToRootComponent() {
