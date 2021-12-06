@@ -72,11 +72,6 @@ public final class AccessibilityManagerNoGui
 	}
 
 	@Override
-	public GeoElement getAltGeoForView() {
-		return null;
-	}
-
-	@Override
 	public boolean isAltTextValid(GeoText altText) {
 		return false;
 	}

@@ -200,11 +200,6 @@ public class AccessibilityManagerW implements AccessibilityManagerInterface {
 	}
 
 	@Override
-	public GeoElement getAltGeoForView() {
-		return altGeoTabber.getAltGeo();
-	}
-
-	@Override
 	public boolean isAltTextValid(GeoText altText) {
 		return altTexts.isValid(altText);
 	}

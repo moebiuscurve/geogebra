@@ -83,12 +83,6 @@ public interface AccessibilityManagerInterface {
 
 	/**
 	 *
-	 * @return the geo that has altText (if any) for the active euclidian view.
-	 */
-	GeoElement getAltGeoForView();
-
-	/**
-	 *
 	 * @param altText to check
 	 * @return if there is a view for the altText
 	 */
