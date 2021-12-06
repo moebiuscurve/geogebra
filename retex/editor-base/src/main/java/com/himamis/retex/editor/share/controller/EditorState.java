@@ -17,6 +17,7 @@ import com.himamis.retex.renderer.share.platform.FactoryProvider;
 public class EditorState {
 
 	private final MetaModel metaModel;
+	private final SelectAllHandler selectAll;
 	private MathSequence rootComponent;
 
 	private MathSequence currentField;
@@ -28,6 +29,7 @@ public class EditorState {
 
 	public EditorState(MetaModel metaModel) {
 		this.metaModel = metaModel;
+		selectAll = new SelectAllHandler(this);
 	}
 
 	public MathSequence getRootComponent() {
@@ -193,95 +195,8 @@ public class EditorState {
 	 * Select the whole formula
 	 */
 	public void selectAll() {
-		MathSequence root = getRootComponent();
-		if (root.isProtected()) {
-			selectProtectedContent();
-		} else  {
-			selectListElement(root);
-		}
+		selectAll.execute();
 	}
-
-	private void selectProtectedContent() {
-		MathComponent first = rootComponent.getArgument(0);
-		currentSelStart = currentField.getArgument(0);
-		if (first instanceof MathArray) {
-			MathArray array = (MathArray) first;
-			if (array.isMatrix()) {
-				selectUpToRootComponent();
-			} else {
-				selectListElement(array.getArgument(0));
-			}
-		} else {
-			currentSelEnd = currentSelStart;
-		}
-	}
-
-	private void selectListElement(MathSequence sequence) {
-		if (currentField != sequence) {
-			selectAllCompositeElement(sequence);
-		} else {
-			MathSequence content = sequenceWithoutBrackets(sequence);
-			currentSelStart = content.getArgument(firstSeparatorOnLeft(content));
-			currentSelEnd = content.getArgument(firstSeparatorOnRight(content));
-		}
-	}
-
-	private MathSequence sequenceWithoutBrackets(MathSequence sequence) {
-		return sequence.size() == 1 && sequence.getArgument(0) instanceof MathArray
-				? ((MathArray) sequence.getArgument(0)).getArgument(0)
-				: sequence;
-	}
-
-	private void selectAllCompositeElement(MathSequence sequence) {
-		MathComponent field = currentField;
-		MathContainer parent = currentField.getParent();
-		while (parent != sequence) {
-			field = parent;
-			parent = parent.getParent();
-
-		}
-		currentSelStart = field;
-		currentSelEnd = currentSelStart;
-	}
-
-	private int firstSeparatorOnRight(MathSequence sequence) {
-		if (isSeparatorAt(sequence, currentOffset)) {
-			return currentOffset - 1;
-		}
-
-		int i = currentOffset;
-		while (i < sequence.getArgumentCount() && !isSeparatorAt(sequence, i)) {
-			i++;
-		}
-
-		return i - 1;
-	}
-
-	private boolean isSeparatorAt(MathSequence sequence, int index) {
-		MathComponent argument = sequence.getArgument(index);
-		return argument instanceof MathCharacter && ((MathCharacter)argument).isSeparator();
-	}
-
-	private int firstSeparatorOnLeft(MathSequence sequence) {
-		int charIndex = isSeparatorAt(sequence, currentOffset)
-				? currentOffset - 1
-				: currentOffset;
-		while (charIndex > 0 && !isSeparatorAt(sequence, charIndex)) {
-			charIndex--;
-		}
-
-		return charIndex == 0 ? 0 : charIndex + 1;
-	}
-
-	private void selectUpToRootComponent() {
-		while (currentSelStart.getParent().getParent() != rootComponent) {
-			anchor(true);
-			currentSelStart = currentSelStart.getParent();
-		}
-
-		currentSelEnd = currentSelStart;
-	}
-
 
 	/**
 	 * Select from cursor position to end of current sub-formula
