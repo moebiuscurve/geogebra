@@ -311,6 +311,8 @@ public abstract class GlobalKeyDispatcher {
 					diff[0] = MyMath.signedNextMultiple(-increment, xGrid * sin60);
 					diff[1] = MyMath.signedNextMultiple(increment, yGrid * cos60);
 					break;
+				default:
+					// do nothing
 				}
 
 				break;
@@ -346,7 +348,13 @@ public abstract class GlobalKeyDispatcher {
 					diff[0] = radius * Math.cos(angle - Math.PI / 6) - posX;
 					diff[1] = radius * Math.sin(angle - Math.PI / 6) - posY;
 					break;
+
+				default:
+					// do nothing
 				}
+
+			default:
+				// do nothing
 			}
 		}
 		tempVec.set(diff);
