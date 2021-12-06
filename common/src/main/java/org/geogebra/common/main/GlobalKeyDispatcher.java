@@ -248,7 +248,7 @@ public abstract class GlobalKeyDispatcher {
 	 * @return whether any object was moved
 	 */
 	public boolean handleArrowKeyMovement(List<GeoElement> geos,
-			double[] diff) {
+			double[] diff, double increment, KeyCodes key) {
 		app.getActiveEuclidianView().getEuclidianController().splitSelectedStrokes(true);
 		GeoElement geo = geos.get(0);
 
@@ -271,10 +271,82 @@ public abstract class GlobalKeyDispatcher {
 		}
 
 		if (app.getActiveEuclidianView().getPointCapturingMode()
-				== EuclidianStyleConstants.POINT_CAPTURING_ON_GRID) {
-			for (int i = 0; i < 2; i++) {
-				diff[i] = Math.signum(diff[i]) * MyMath.nextMultiple(Math.abs(diff[i]),
-						app.getActiveEuclidianView().getGridDistances(i));
+				== EuclidianStyleConstants.POINT_CAPTURING_ON_GRID && key != null) {
+
+			double xGrid = app.getActiveEuclidianView().getGridDistances(0);
+			double yGrid = app.getActiveEuclidianView().getGridDistances(1);
+
+			switch (app.getActiveEuclidianView().getGridType()) {
+			case EuclidianView.GRID_CARTESIAN:
+			case EuclidianView.GRID_CARTESIAN_WITH_SUBGRID:
+				diff[0] = MyMath.signedNextMultiple(diff[0], xGrid);
+				diff[1] = MyMath.signedNextMultiple(diff[1], yGrid);
+				break;
+
+			case EuclidianView.GRID_ISOMETRIC:
+				double sin60 = Math.sqrt(3) / 2;
+				double cos60 = 0.5;
+
+				switch (key) {
+				case UP:
+					diff[1] = MyMath.signedNextMultiple(increment, yGrid);
+					break;
+				case DOWN:
+					diff[1] = MyMath.signedNextMultiple(-increment, yGrid);
+					break;
+				case LEFT:
+					diff[0] = MyMath.signedNextMultiple(-increment, xGrid * sin60);
+					diff[1] = MyMath.signedNextMultiple(-increment, yGrid * cos60);
+					break;
+				case RIGHT:
+					diff[0] = MyMath.signedNextMultiple(increment, xGrid * sin60);
+					diff[1] = MyMath.signedNextMultiple(increment, yGrid * cos60);
+					break;
+				case MINUS:
+					diff[0] = MyMath.signedNextMultiple(increment, xGrid * sin60);
+					diff[1] = MyMath.signedNextMultiple(-increment, yGrid * cos60);
+					break;
+				case PLUS:
+				case EQUALS:
+					diff[0] = MyMath.signedNextMultiple(-increment, xGrid * sin60);
+					diff[1] = MyMath.signedNextMultiple(increment, yGrid * cos60);
+					break;
+				}
+
+				break;
+
+			case EuclidianView.GRID_POLAR:
+				if (geos.size() != 1) {
+					break;
+				}
+
+				double posX = geo.getLabelPosition().getX();
+				double posY = geo.getLabelPosition().getY();
+
+				double angle = Math.atan2(posY, posX);
+				double radius = Math.hypot(posX, posY);
+
+				switch (key) {
+				case UP:
+					diff[0] = MyMath.signedNextMultiple(increment, xGrid * Math.cos(angle));
+					diff[1] = MyMath.signedNextMultiple(increment, yGrid * Math.sin(angle));
+					break;
+
+				case DOWN:
+					diff[0] = MyMath.signedNextMultiple(increment, -xGrid * Math.cos(angle));
+					diff[1] = MyMath.signedNextMultiple(increment, -yGrid * Math.sin(angle));
+					break;
+
+				case LEFT:
+					diff[0] = radius * Math.cos(angle + Math.PI / 6) - posX;
+					diff[1] = radius * Math.sin(angle + Math.PI / 6) - posY;
+					break;
+
+				case RIGHT:
+					diff[0] = radius * Math.cos(angle - Math.PI / 6) - posX;
+					diff[1] = radius * Math.sin(angle - Math.PI / 6) - posY;
+					break;
+				}
 			}
 		}
 		tempVec.set(diff);
@@ -1424,7 +1496,7 @@ public abstract class GlobalKeyDispatcher {
 			double increment = getIncrement(geos);
 			double[] diff = new double[] { changeValX * increment,
 					changeValY * increment, changeValZ * increment};
-			moved = handleArrowKeyMovement(geos, diff);
+			moved = handleArrowKeyMovement(geos, diff, increment, key);
 			hasUnsavedGeoChanges = true;
 		}
 
