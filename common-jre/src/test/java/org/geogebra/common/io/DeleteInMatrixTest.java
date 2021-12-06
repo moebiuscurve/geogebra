@@ -11,7 +11,7 @@ public class DeleteInMatrixTest {
 	private static final String MATRIX_1_TO_9 = "{{1,2,3},{4,5,6},{7,8,9}}";
 	private static final String ROW_MATRIX = "{{1,2,3}}";
 	public static final String MATRIX_MULIFIGURE = "{{123,456},{321,654}}";
-	public static final String MATRIX_FRAC= "{{1/(2*sqrt(2)),456},{321,654}}";
+	public static final String MATRIX_FRAC = "{{1/(2*sqrt(2)),456},{321,654}}";
 	private static final AppCommon app = AppCommonFactory.create();
 
 	/**

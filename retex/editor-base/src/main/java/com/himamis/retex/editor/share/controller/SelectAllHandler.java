@@ -6,13 +6,26 @@ import com.himamis.retex.editor.share.model.MathComponent;
 import com.himamis.retex.editor.share.model.MathContainer;
 import com.himamis.retex.editor.share.model.MathSequence;
 
+/**
+ * Class to handle Ctrl-A in inputboxes
+ *
+ * @author laszlo
+ */
 public class SelectAllHandler {
 	private final EditorState editorState;
+
+	/**
+	 *
+	 * @param editorState {@link EditorState}
+	 */
 	public SelectAllHandler(EditorState editorState) {
 		this.editorState = editorState;
 	}
 
-
+	/**
+	 * Select all elements based on the context:
+	 * Matrix elements for matrices, coordinate components for points, etc.
+	 */
 	public void execute() {
 		MathSequence root = editorState.getRootComponent();
 		if (root.isProtected()) {

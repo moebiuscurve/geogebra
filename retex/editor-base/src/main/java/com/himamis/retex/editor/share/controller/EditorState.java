@@ -27,6 +27,10 @@ public class EditorState {
 	private MathComponent currentSelEnd;
 	private MathComponent selectionAnchor;
 
+	/**
+	 *
+	 * @param metaModel {@link MetaModel}
+	 */
 	public EditorState(MetaModel metaModel) {
 		this.metaModel = metaModel;
 		selectAll = new SelectAllHandler(this);
