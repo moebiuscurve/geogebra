@@ -123,7 +123,8 @@ public class SelectAllHandler {
 	}
 
 	private void selectUpToRootComponent() {
-		while (editorState.getSelectionStart().getParent().getParent() != editorState.getRootComponent()) {
+		while (editorState.getSelectionStart().getParent().getParent()
+				!= editorState.getRootComponent()) {
 			editorState.anchor(true);
 			setSelectionStart(editorState.getSelectionStart().getParent());
 		}

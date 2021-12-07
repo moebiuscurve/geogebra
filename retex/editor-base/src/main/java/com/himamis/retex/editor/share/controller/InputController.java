@@ -195,7 +195,6 @@ public class InputController {
 	 */
 	public void newBraces(EditorState editorState, char ch) {
 		if (editorState.hasSelection()) {
-
 			editorState.cursorToSelectionStart();
 		}
 
