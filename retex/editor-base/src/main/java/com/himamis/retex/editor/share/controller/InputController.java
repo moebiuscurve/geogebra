@@ -1201,10 +1201,7 @@ public class InputController {
 	}
 
 	private boolean shouldCharBeIgnored(char ch) {
-		if (plainTextMode) {
-			return true;
-		}
-		return ignoreChars.contains(ch);
+		return !plainTextMode && ignoreChars.contains(ch);
 	}
 
 	private void handleTextModeInsert(EditorState editorState, char ch) {
