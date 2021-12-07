@@ -107,7 +107,7 @@ public class SelectAllHandler {
 
 	private boolean isSeparatorAt(MathSequence sequence, int index) {
 		MathComponent argument = sequence.getArgument(index);
-		return argument instanceof MathCharacter && ((MathCharacter)argument).isSeparator();
+		return argument instanceof MathCharacter && ((MathCharacter) argument).isSeparator();
 	}
 
 	private int firstSeparatorOnLeft(MathSequence sequence) {
