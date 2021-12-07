@@ -83,7 +83,7 @@ public class SelectAllHandler {
 	private void selectAllCompositeElement(MathSequence sequence) {
 		MathComponent field = getCurrentField();
 		MathContainer parent = field.getParent();
-		while (parent != sequence) {
+		while (parent != sequence && parent != null) {
 			field = parent;
 			parent = parent.getParent();
 

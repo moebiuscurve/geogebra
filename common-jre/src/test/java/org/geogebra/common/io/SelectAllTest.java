@@ -27,6 +27,8 @@ public class SelectAllTest {
 		EditorChecker checker = new EditorChecker(app);
 		checker.fromParser("(321.45,4)")
 				.setModifiers(KeyEvent.CTRL_MASK)
+				.protect()
+				.left(8)
 				.typeKey(JavaKeyCodes.VK_A)
 				.type("0")
 				.checkAsciiMath("(0,4)");
@@ -36,10 +38,22 @@ public class SelectAllTest {
 	public void testPointSimpleCoordinateXFromMiddle() {
 		EditorChecker checker = new EditorChecker(app);
 		checker.fromParser("(321.45,4)")
-				.right(5)
+				.protect()
+				.left(4)
 				.setModifiers(KeyEvent.CTRL_MASK)
 				.typeKey(JavaKeyCodes.VK_A)
 				.type("0")
 				.checkAsciiMath("(0,4)");
+	}
+
+	@Test
+	public void listShouldSelectAllElements() {
+		EditorChecker checker = new EditorChecker(app);
+		checker.fromParser("{1,2,3}")
+				.left(1)
+				.setModifiers(KeyEvent.CTRL_MASK)
+				.typeKey(JavaKeyCodes.VK_A)
+				.type(" ")
+				.checkAsciiMath(" ");
 	}
 }
