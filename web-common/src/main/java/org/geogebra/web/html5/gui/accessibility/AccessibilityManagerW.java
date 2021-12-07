@@ -10,6 +10,7 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.SelectionManager;
+import org.geogebra.web.html5.main.AltTextCollector;
 
 /**
  * Web implementation of AccessibilityManager.
@@ -20,9 +21,9 @@ public class AccessibilityManagerW implements AccessibilityManagerInterface {
 	private final AltGeoTabber altGeoTabber;
 	private final App app;
 	private final SelectionManager selection;
-	private final ViewAltTexts altTexts;
 	private MayHaveFocus anchor;
 	private SideBarAccessibilityAdapter menuContainer;
+	private final AltTextCollector altTextCollector;
 
 	private final TreeSet<MayHaveFocus> components = new TreeSet<>((o1, o2) -> {
 		int viewDiff = o1.getAccessibilityGroup().ordinal()
@@ -46,7 +47,8 @@ public class AccessibilityManagerW implements AccessibilityManagerInterface {
 		this.app = app;
 		selection = app.getSelectionManager();
 		this.geoTabber = new GeoTabber(app);
-		altTexts = new ViewAltTexts(app);
+		ViewAltTexts altTexts = new ViewAltTexts(app);
+		altTextCollector = new AltTextCollector(app, altTexts);
 		altGeoTabber = new AltGeoTabber(app, altTexts);
 		components.add(altGeoTabber);
 		components.add(geoTabber);
@@ -200,7 +202,7 @@ public class AccessibilityManagerW implements AccessibilityManagerInterface {
 	}
 
 	@Override
-	public boolean isAltTextValid(GeoText altText) {
-		return altTexts.isValid(altText);
+	public void appendAltText(GeoText altText) {
+		altTextCollector.add(altText);
 	}
 }

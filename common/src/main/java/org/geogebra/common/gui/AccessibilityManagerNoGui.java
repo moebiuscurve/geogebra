@@ -72,7 +72,7 @@ public final class AccessibilityManagerNoGui
 	}
 
 	@Override
-	public boolean isAltTextValid(GeoText altText) {
-		return false;
+	public void appendAltText(GeoText altText) {
+		// not used
 	}
 }

@@ -1,23 +1,25 @@
 package org.geogebra.web.html5.main;
 
-import org.geogebra.common.kernel.geos.GeoText;
+import org.geogebra.common.euclidian.ScreenReaderAdapter;
+import org.geogebra.common.kernel.geos.ScreenReaderBuilder;
 import org.gwtproject.timer.client.Timer;
 
 class AltTextTimer extends Timer {
-	private final AppW appW;
-	private GeoText altText;
+	public static final int DELAY_MILLIS = 700;
+	private final ScreenReaderAdapter screenReader;
+	private String text;
 
-	public AltTextTimer(AppW appW) {
-		this.appW = appW;
+	public AltTextTimer(ScreenReaderAdapter screenReader) {
+		this.screenReader = screenReader;
 	}
 
 	@Override
 	public void run() {
-		appW.getEuclidianView1().setAltText(altText);
+		screenReader.readText(text);
 	}
 
-	public void schedule(GeoText altText, int milis) {
-		this.altText = altText;
-		schedule(milis);
+	public void read(ScreenReaderBuilder sb) {
+		text = sb.toString();
+		schedule(DELAY_MILLIS);
 	}
 }

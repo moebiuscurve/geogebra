@@ -237,7 +237,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	private DefaultSettings defaultSettings;
 	private FpsProfiler fpsProfiler;
 	private AccessibilityView accessibilityView;
-
 	Timer timeruc = new Timer() {
 		@Override
 		public void run() {
@@ -2825,10 +2824,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 	@Override
 	public void setAltText(GeoText altText) {
-		if (accessibilityManager.isAltTextValid(altText)) {
-			AltTextTimer altTextTimer = new AltTextTimer(this);
-			altTextTimer.schedule(altText, 700);
-		}
+		accessibilityManager.appendAltText(altText);
 	}
 
 	@Override

@@ -48,6 +48,15 @@ public class ViewAltTexts {
 		return visibleViews.size();
 	}
 
+	/**
+	 *
+	 * @return the number of views that have altText and visible;
+	 */
+	public int activeAltTextCount() {
+		updateVisibleViews();
+		return visibleViews.size();
+	}
+
 	void updateVisibleViews() {
 		visibleViews = availableViews.stream().filter(app::showView).collect(Collectors.toList());
 	}

@@ -82,9 +82,8 @@ public interface AccessibilityManagerInterface {
 	void setTabOverGeos();
 
 	/**
-	 *
-	 * @param altText to check
-	 * @return if there is a view for the altText
+	 * Append an altText of a view to read.
+	 * @param altText of a view.
 	 */
-	boolean isAltTextValid(GeoText altText);
+	void appendAltText(GeoText altText);
 }
