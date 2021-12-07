@@ -30,8 +30,9 @@ public class SelectAllHandler {
 		MathSequence root = editorState.getRootComponent();
 		if (root.isProtected()) {
 			selectProtectedContent();
-		} else  {
-			selectListElement(root);
+		} else {
+			setSelectionStart(root);
+			setSelectionEnd(root);
 		}
 	}
 
