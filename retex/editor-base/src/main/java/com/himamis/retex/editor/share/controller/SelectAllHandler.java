@@ -132,5 +132,4 @@ public class SelectAllHandler {
 
 		setSelectionEnd(editorState.getSelectionStart());
 	}
-
 }

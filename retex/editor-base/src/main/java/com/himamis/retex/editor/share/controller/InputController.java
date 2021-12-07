@@ -1,6 +1,8 @@
 package com.himamis.retex.editor.share.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.j2objc.annotations.Weak;
 import com.himamis.retex.editor.share.editor.MathField;
@@ -25,6 +27,7 @@ public class InputController {
 	public static final char FUNCTION_CLOSE_KEY = ')';
 	public static final char DELIMITER_KEY = ';';
 	private static final String[] SUFFIX_REPLACEABLE_FUNCTIONS = {"abs", "sqrt"};
+	private static final List<Character> ignoreChars = Arrays.asList('{', '}');
 
 	private final MetaModel metaModel;
 	private final RemoveContainer removeContainer;
@@ -1113,6 +1116,10 @@ public class InputController {
 			return true;
 		}
 
+		if  (shouldCharBeIgnored(ch)) {
+			return true;
+		}
+
 		if (plainTextMode || editorState.isInsideQuotes()) {
 			handleTextModeInsert(editorState, ch);
 			return true;
@@ -1191,6 +1198,13 @@ public class InputController {
 			}
 		}
 		return handled;
+	}
+
+	private boolean shouldCharBeIgnored(char ch) {
+		if (plainTextMode) {
+			return true;
+		}
+		return ignoreChars.contains(ch);
 	}
 
 	private void handleTextModeInsert(EditorState editorState, char ch) {
