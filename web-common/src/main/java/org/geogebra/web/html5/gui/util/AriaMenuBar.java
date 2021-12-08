@@ -96,7 +96,7 @@ public class AriaMenuBar extends FlowPanel {
 	/**
 	 * @return selected item (may be null)
 	 */
-	protected AriaMenuItem getSelectedItem() {
+	public AriaMenuItem getSelectedItem() {
 		return this.selectedItem;
 	}
 
@@ -153,6 +153,21 @@ public class AriaMenuBar extends FlowPanel {
 	}
 
 	/**
+	 * Returns the index of the menu item that is currently selected.
+	 *
+	 * @return returns the selected item
+	 */
+	public int getSelectedItemIndex() {
+		// The index of the currently selected item can only be
+		// obtained if the menu is showing.
+		AriaMenuItem selectedItem = getSelectedItem();
+		if (selectedItem != null) {
+			return getItems().indexOf(selectedItem);
+		}
+		return -1;
+	}
+
+	/**
 	 * Removes selection from previously selected item.
 	 */
 	public void unselect() {
@@ -182,7 +197,9 @@ public class AriaMenuBar extends FlowPanel {
 	 *            item to move focus to
 	 */
 	protected void focus(AriaMenuItem item) {
-		item.getElement().focus();
+		if (item.isFocusable()) {
+			item.getElement().focus();
+		}
 	}
 
 	/**
@@ -272,7 +289,6 @@ public class AriaMenuBar extends FlowPanel {
 		}
 		switch (DOM.eventGetType(event)) {
 		case Event.ONCLICK:
-			// TODOFocusPanel.impl.focus(getElement());
 			// Fire an item's command when the user clicks on it.
 			if (item != null) {
 				doItemAction(item);

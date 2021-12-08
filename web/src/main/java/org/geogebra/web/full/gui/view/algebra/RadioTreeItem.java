@@ -153,7 +153,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 
 	protected Localization loc;
 
-	private RadioTreeItemController controller;
+	private LatexTreeItemController controller;
 
 	String lastTeX;
 	private MathFieldW mf;
@@ -1443,7 +1443,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	/**
 	 * @return controller
 	 */
-	public RadioTreeItemController getController() {
+	public LatexTreeItemController getController() {
 		return controller;
 	}
 
@@ -1451,7 +1451,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	 * @param controller
 	 *            controller
 	 */
-	public void setController(RadioTreeItemController controller) {
+	public void setController(LatexTreeItemController controller) {
 		this.controller = controller;
 	}
 
@@ -1534,7 +1534,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 		}
 	}
 
-	protected RadioTreeItemController createController() {
+	protected LatexTreeItemController createController() {
 		return new LatexTreeItemController(this);
 	}
 
@@ -1543,7 +1543,7 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	 * @return The controller as LatexTreeItemController.
 	 */
 	public LatexTreeItemController getLatexController() {
-		return (LatexTreeItemController) getController();
+		return getController();
 	}
 
 	/**
@@ -1839,11 +1839,6 @@ public class RadioTreeItem extends AVTreeItem implements MathKeyboardListener,
 	@Override
 	public List<String> getCompletions() {
 		return getInputSuggestions().getCompletions();
-	}
-
-	@Override
-	public List<String> resetCompletions() {
-		return getInputSuggestions().resetCompletions();
 	}
 
 	@Override

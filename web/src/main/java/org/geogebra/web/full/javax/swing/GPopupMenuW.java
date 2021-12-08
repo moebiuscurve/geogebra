@@ -22,6 +22,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -46,11 +47,11 @@ public class GPopupMenuW implements AttachedToDOM {
 	 * the same time
 	 */
 	GPopupMenuW subPopup;
-	private AppW app;
+	private final AppW app;
 	private boolean menuShown = false;
 
 	private boolean horizontal;
-	private AriaMenuItem openItem = null;
+	protected AriaMenuItem openItem = null;
 
 	/**
 	 * @param app
@@ -292,27 +293,31 @@ public class GPopupMenuW implements AttachedToDOM {
 			// The submenu is not added for the menu as submenu,
 			// but this will be placed on a different popup panel.
 			// In this way we can set this popup panel's position easily.
-			String itemHTML = item.getHTML();
-			ScheduledCommand itemCommand = null;
-			final AriaMenuItem newItem = new AriaMenuItem(itemHTML, true,
-					itemCommand);
-			newItem.setStyleName(item.getStyleName());
-			newItem.getElement().setAttribute("hasPopup", "true");
-			popupMenu.addItem(newItem);
-			itemCommand = () -> {
+			item.getElement().setAttribute("hasPopup", "true");
+			popupMenu.addItem(item);
+			ScheduledCommand itemCommand = () -> {
 				if (subPopup != null) {
 					subPopup.removeFromDOM();
 				}
-				subPopup = new GPopupMenuW(subMenu, getApp());
+				if (item.getSubmenuHeading() != null) {
+					FlowPanel merged = new FlowPanel();
+					merged.add(item.getSubmenuHeading());
+					merged.add(subMenu);
+					merged.addStyleName("submenuWithHeading");
+					subPopup = new GPopupMenuW(merged, getApp());
+				} else {
+					subPopup = new GPopupMenuW(subMenu, getApp());
+				}
+
 				subPopup.setVisible(true);
 				subMenu.unselect();
 				subMenu.stylePopup(subPopup.getPopupPanel());
 				// Calculate the position of the "submenu", and show it
-				openItem = newItem;
+				openItem = item;
 				positionAndShowSubmenu();
 
 			};
-			newItem.setScheduledCommand(itemCommand);
+			item.setScheduledCommand(itemCommand);
 
 			// adding arrow for the menuitem
 
@@ -320,7 +325,7 @@ public class GPopupMenuW implements AttachedToDOM {
 			if (!horizontal) {
 				SVGResource imgRes = getSubMenuIcon(
 						app.getLocalization().isRightToLeftReadingOrder());
-				popupMenu.appendSubmenu(newItem, imgRes);
+				popupMenu.appendSubmenu(item, imgRes);
 			}
 
 		}
@@ -571,10 +576,18 @@ public class GPopupMenuW implements AttachedToDOM {
 		}
 	}
 
+	public void moveSelectionDown() {
+		popupMenu.moveSelectionDown();
+	}
+
+	public void moveSelectionUp() {
+		popupMenu.moveSelectionUp();
+	}
+
 	private class PopupMenuBar extends GMenuBar {
 
 		private GPopupMenuW selectListener;
-		private Map<AriaMenuItem, GCollapseMenuItem> expandItems = new HashMap<>();
+		private final Map<AriaMenuItem, GCollapseMenuItem> expandItems = new HashMap<>();
 		private GCollapseMenuItem activeCollapseItem = null;
 
 		public PopupMenuBar(AppW app1) {

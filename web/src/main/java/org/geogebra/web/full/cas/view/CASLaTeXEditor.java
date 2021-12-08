@@ -249,11 +249,6 @@ public class CASLaTeXEditor extends FlowPanel implements CASEditorW,
 	}
 
 	@Override
-	public List<String> resetCompletions() {
-		return getInputSuggestions().resetCompletions();
-	}
-
-	@Override
 	public List<String> getCompletions() {
 		return getInputSuggestions().getCompletions();
 	}

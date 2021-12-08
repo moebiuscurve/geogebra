@@ -272,7 +272,7 @@ public class GuiManagerW extends GuiManager
 		removePopup();
 		final SpreadsheetContextMenuW contextMenu = new SpreadsheetContextMenuW(
 				mt);
-		currentPopup = (AttachedToDOM) contextMenu.getMenuContainer();
+		currentPopup = contextMenu.getMenuContainer();
 		return contextMenu;
 	}
 

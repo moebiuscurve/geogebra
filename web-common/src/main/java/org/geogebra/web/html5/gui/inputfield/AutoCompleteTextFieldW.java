@@ -433,7 +433,9 @@ public class AutoCompleteTextFieldW extends FlowPanel
 		autoComplete = val && loc.isAutoCompletePossible();
 	}
 
-	@Override
+	/**
+	 * @return list of completions
+	 */
 	public List<String> resetCompletions() {
 		String text = getText();
 		updateCurrentWord(false);

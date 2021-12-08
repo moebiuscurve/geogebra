@@ -6,10 +6,10 @@ import java.util.List;
 import org.geogebra.common.gui.inputfield.InputHelper;
 import org.geogebra.common.kernel.Macro;
 import org.geogebra.common.kernel.commands.AlgebraProcessor;
+import org.geogebra.common.main.App;
 import org.geogebra.common.main.Localization;
 import org.geogebra.common.util.AutoCompleteDictionary;
 import org.geogebra.common.util.debug.Log;
-import org.geogebra.web.html5.main.AppW;
 
 /**
  * Autocomplete controller for both plain text and equation editor input
@@ -17,7 +17,7 @@ import org.geogebra.web.html5.main.AppW;
 public class InputSuggestions {
 	private List<String> completions;
 	private AutoCompleteDictionary dict;
-	private AppW app;
+	private App app;
 	private boolean forCAS;
 
 	/**
@@ -26,7 +26,7 @@ public class InputSuggestions {
 	 * @param isForCas
 	 *            whether to use CAS view dictionary
 	 */
-	public InputSuggestions(AppW app, boolean isForCas) {
+	public InputSuggestions(App app, boolean isForCas) {
 		this.app = app;
 		this.forCAS = isForCas;
 	}
@@ -46,7 +46,7 @@ public class InputSuggestions {
 	 * 
 	 * @return completions for current word
 	 */
-	public List<String> resetCompletions(StringBuilder currentWord) {
+	public List<String> resetCompletions(CharSequence currentWord) {
 		completions = null;
 
 		boolean korean = false;
@@ -73,8 +73,6 @@ public class InputSuggestions {
 					.getCompletions(cmdPrefix);
 		}
 
-		Log.debug(cmdPrefix + ":"
-				+ (completions == null ? "-1" : completions.size()));
 		List<String> commandCompletions = getSyntaxes(completions);
 
 		// Start with the built-in function completions
@@ -103,7 +101,7 @@ public class InputSuggestions {
 	 *            current word
 	 * @return whether the word is long enough to trigger autocomplete
 	 */
-	protected boolean needsAutocomplete(StringBuilder currentWord) {
+	protected boolean needsAutocomplete(CharSequence currentWord) {
 		return InputHelper.needsAutocomplete(currentWord, app.getKernel());
 	}
 
@@ -121,47 +119,61 @@ public class InputSuggestions {
 		}
 		ArrayList<String> syntaxes = new ArrayList<>();
 		for (String cmd : commands) {
-			String cmdInt = app.getInternalCommand(cmd);
-			boolean englishOnly = cmdInt == null
-					&& isFallbackCompletitionAllowed();
-
-			if (englishOnly) {
-				cmdInt = app.englishToInternal(cmd);
-			}
-			String syntaxString;
-			if (forCAS) {
-				syntaxString = app.getLocalization()
-						.getCommandSyntaxCAS(cmdInt);
-			} else {
-				AlgebraProcessor ap = app.getKernel().getAlgebraProcessor();
-				syntaxString = englishOnly
-						? ap.getEnglishSyntax(cmdInt, app.getSettings())
-						: ap.getSyntax(cmdInt, app.getSettings());
-			}
-
-			if (syntaxString == null) {
-				return syntaxes;
-			}
-
-			if (syntaxString.endsWith(Localization.syntaxCAS)
-					|| syntaxString.endsWith(Localization.syntaxStr)) {
-				// command not found, check for macros
-				Macro macro = forCAS ? null
-						: app.getKernel().getMacro(cmd);
-				if (macro != null) {
-					syntaxes.add(macro.toString());
-				} else {
-					// syntaxes.add(cmdInt + "[]");
-					Log.debug("Can't find syntax for: " + cmd);
-				}
-
-				continue;
-			}
-			for (String syntax : syntaxString.split("\\n")) {
-				syntaxes.add(syntax);
-			}
+			addSyntaxes(cmd, syntaxes);
 		}
 		return syntaxes;
+	}
+
+	/**
+	 * @param command localized command
+	 * @return syntaxes of a single command
+	 */
+	public List<String> getSyntaxes(String command) {
+		ArrayList<String> syntaxes = new ArrayList<>();
+		addSyntaxes(command, syntaxes);
+		return syntaxes;
+	}
+
+	private void addSyntaxes(String cmd, ArrayList<String> syntaxes) {
+		String cmdInt = app.getInternalCommand(cmd);
+		boolean englishOnly = cmdInt == null
+				&& isFallbackCompletitionAllowed();
+
+		if (englishOnly) {
+			cmdInt = app.englishToInternal(cmd);
+		}
+		String syntaxString;
+		if (forCAS) {
+			syntaxString = app.getLocalization()
+					.getCommandSyntaxCAS(cmdInt);
+		} else {
+			AlgebraProcessor ap = app.getKernel().getAlgebraProcessor();
+			syntaxString = englishOnly
+					? ap.getEnglishSyntax(cmdInt, app.getSettings())
+					: ap.getSyntax(cmdInt, app.getSettings());
+		}
+
+		if (syntaxString == null) {
+			return;
+		}
+
+		if (syntaxString.endsWith(Localization.syntaxCAS)
+				|| syntaxString.endsWith(Localization.syntaxStr)) {
+			// command not found, check for macros
+			Macro macro = forCAS ? null
+					: app.getKernel().getMacro(cmd);
+			if (macro != null) {
+				syntaxes.add(macro.toString());
+			} else {
+				// syntaxes.add(cmdInt + "[]");
+				Log.debug("Can't find syntax for: " + cmd);
+			}
+
+			return;
+		}
+		for (String syntax : syntaxString.split("\\n")) {
+			syntaxes.add(syntax);
+		}
 	}
 
 	/**

@@ -10,8 +10,6 @@ import com.google.gwt.user.client.ui.Widget;
 public interface AutoCompleteW {
 	boolean getAutoComplete();
 
-	List<String> resetCompletions();
-
 	List<String> getCompletions();
 
 	void setFocus(boolean focus);
