@@ -3,6 +3,7 @@ package org.geogebra.web.html5.main;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.kernel.geos.ScreenReaderBuilder;
 import org.geogebra.common.main.App;
@@ -14,12 +15,13 @@ public class AltTextCollector {
 	private final Localization loc;
 	private final AltTextTimer timer;
 	private final ViewAltTexts views;
-
+	private final List<GeoNumeric> dependencies;
 	public AltTextCollector(App app, ViewAltTexts views) {
 		this.views = views;
 		timer = new AltTextTimer(app.getActiveEuclidianView().getScreenReader());
 		loc = app.getLocalization();
 		lines = new ArrayList<>();
+		dependencies = new ArrayList<>();
 	}
 
 	public void add(GeoText altText) {
@@ -36,14 +38,33 @@ public class AltTextCollector {
 
 	private ScreenReaderBuilder concatLines() {
 		ScreenReaderBuilder sb = new ScreenReaderBuilder(loc);
+		appendDependencies(sb);
 		for (String line: lines) {
 			sb.append(line);
-			sb.appendSpace();
+			sb.endSentence();
 		}
+		dependencies.clear();
 		return sb;
+	}
+
+	private void appendDependencies(ScreenReaderBuilder sb) {
+		for (GeoNumeric numeric: dependencies) {
+			sb.append(numeric.getAuralCurrentValue());
+			sb.endSentence();
+		}
 	}
 
 	private boolean isLastAltText() {
 		return lines.size() == views.activeAltTextCount();
+	}
+
+	public boolean isIndependent(GeoNumeric geo) {
+		return views.isIndependent(geo);
+	}
+
+	public void addDependency(GeoNumeric geo) {
+		if (!dependencies.contains(geo)) {
+			dependencies.add(geo);
+		}
 	}
 }

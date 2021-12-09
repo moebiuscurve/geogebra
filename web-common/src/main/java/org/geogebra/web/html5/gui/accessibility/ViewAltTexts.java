@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.main.App;
 
@@ -92,5 +93,16 @@ public class ViewAltTexts {
 		}
 
 		return false;
+	}
+
+	public boolean isIndependent(GeoNumeric geo) {
+		updateVisibleViews();
+		for (int i = 0; i < viewCount(); i++) {
+			GeoElement altText = getAltGeo(i);
+			if (altText != null && geo.algoUpdateSetContains(altText.getParentAlgorithm())) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

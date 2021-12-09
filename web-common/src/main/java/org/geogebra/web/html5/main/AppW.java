@@ -2872,12 +2872,21 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	public void readLater(GeoNumeric geo) {
 		if (!kernel.getConstruction().isFileLoading()
 				&& !appletParameters.preventFocus()) {
-			if (readerTimer == null) {
-				readerTimer = new ReaderTimer();
+			if (accessibilityManager.isIndependentFromAltTexts(geo)) {
+				readWithTimer(geo);
+			} else {
+				accessibilityManager.addAsAltTextDependency(geo);
+				Log.debug(geo.getLabelSimple() + " is not independent for altTexts");
 			}
-			readerTimer.setGeo(geo);
-			readerTimer.schedule(700);
 		}
+	}
+
+	private void readWithTimer(GeoNumeric geo) {
+		if (readerTimer == null) {
+			readerTimer = new ReaderTimer();
+		}
+		readerTimer.setGeo(geo);
+		readerTimer.schedule(700);
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package org.geogebra.common.gui;
 
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoText;
 
 /**
@@ -86,4 +87,18 @@ public interface AccessibilityManagerInterface {
 	 * @param altText of a view.
 	 */
 	void appendAltText(GeoText altText);
+
+	/**
+	 *
+	 * @param geo to check
+	 * @return if geo is a dependency of the Alt Text of a view.
+	 */
+	boolean isIndependentFromAltTexts(GeoNumeric geo);
+
+	/**
+	 * Add geo as alt text dependency, so its value can be read
+	 * along with the alt text
+	 * @param geo to add.
+	 */
+	void addAsAltTextDependency(GeoNumeric geo);
 }

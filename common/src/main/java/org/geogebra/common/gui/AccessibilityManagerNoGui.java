@@ -1,6 +1,7 @@
 package org.geogebra.common.gui;
 
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoText;
 
 /**
@@ -73,6 +74,16 @@ public final class AccessibilityManagerNoGui
 
 	@Override
 	public void appendAltText(GeoText altText) {
+		// not used
+	}
+
+	@Override
+	public boolean isIndependentFromAltTexts(GeoNumeric geo) {
+		return true;
+	}
+
+	@Override
+	public void addAsAltTextDependency(GeoNumeric geo) {
 		// not used
 	}
 }

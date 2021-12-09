@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import org.geogebra.common.gui.AccessibilityManagerInterface;
 import org.geogebra.common.gui.MayHaveFocus;
 import org.geogebra.common.kernel.geos.GeoElement;
+import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoText;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.SelectionManager;
@@ -204,5 +205,15 @@ public class AccessibilityManagerW implements AccessibilityManagerInterface {
 	@Override
 	public void appendAltText(GeoText altText) {
 		altTextCollector.add(altText);
+	}
+
+	@Override
+	public boolean isIndependentFromAltTexts(GeoNumeric geo) {
+		return altTextCollector.isIndependent(geo);
+	}
+
+	@Override
+	public void addAsAltTextDependency(GeoNumeric geo) {
+		altTextCollector.addDependency(geo);
 	}
 }
