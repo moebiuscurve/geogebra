@@ -1,5 +1,6 @@
 package org.geogebra.common.euclidian;
 
+import org.geogebra.common.gui.EdgeInsets;
 import org.geogebra.common.main.settings.EuclidianSettings;
 import org.geogebra.common.util.DoubleUtil;
 
@@ -27,6 +28,8 @@ public abstract class EvPositioner {
     protected abstract boolean isPortrait();
 
     protected abstract int translateToDp(int pixels);
+
+    protected abstract int getStatusBarHeight();
 
     /**
      * Initializes the xZero and yZero.
@@ -102,12 +105,15 @@ public abstract class EvPositioner {
      * @param avHeight av height
      */
     public void onAvSizeChanged(int avWidth, int avHeight) {
+        boolean isPortrait = isPortrait();
+        int avWidthDp = translateToDp(avWidth);
+        int avHeightDp = translateToDp(avHeight);
         int x, y;
-        if (isPortrait()) {
+        if (isPortrait) {
             x = 0;
-            y = euclidianView.getHeight() - translateToDp(avHeight);
+            y = euclidianView.getHeight() - avHeightDp;
         } else {
-            x = translateToDp(avWidth);
+            x = avWidthDp;
             y = euclidianView.getHeight();
         }
 
@@ -116,6 +122,13 @@ public abstract class EvPositioner {
             updateVisibleUntilY(y);
             updateVisibleEv();
         }
+
+        int leftInset = isPortrait ? 0 : avWidthDp;
+        int topInset = translateToDp(getStatusBarHeight());
+        int rightInset = 0;
+        int bottomInset = isPortrait ? avHeightDp : 0;
+        EdgeInsets insets = new EdgeInsets(leftInset, topInset, rightInset, bottomInset);
+        euclidianView.setSafeAreaInsets(insets);
     }
 
     private void updateVisibleFromX(int x) {

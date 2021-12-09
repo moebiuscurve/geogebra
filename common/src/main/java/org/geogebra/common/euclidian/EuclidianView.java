@@ -1279,8 +1279,12 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * @return true if coords are on view
 	 */
 	public boolean isOnView(double x, double y) {
-		return (x >= getXmin()) && (x <= getXmax())
-				&& (y >= getYmin()) && (y <= getYmax());
+		double safeAreaLeft = toRealWorldCoordX(safeAreaInsets.getLeft());
+		double safeAreaRight = toRealWorldCoordX(getWidth() - safeAreaInsets.getRight());
+		double safeAreaTop = toRealWorldCoordY(safeAreaInsets.getTop());
+		double safeAreaBottom = toRealWorldCoordY(getHeight() - safeAreaInsets.getBottom());
+		return (x >= safeAreaLeft) && (x <= safeAreaRight)
+				&& (y >= safeAreaBottom) && (y <= safeAreaTop);
 	}
 
 	/**

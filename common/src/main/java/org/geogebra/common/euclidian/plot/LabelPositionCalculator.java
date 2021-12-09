@@ -34,18 +34,18 @@ public class LabelPositionCalculator {
 	public GPoint calculate(double x, double y) {
 		double xLabel = bounds.toScreenCoordXd(x) + X_GAP;
 		if (xLabel < X_THRESHOLD_LEFT) {
-			xLabel = X_MARGIN_LEFT;
+			xLabel = X_MARGIN_LEFT + bounds.getSafeAreaInsets().getLeft();
 		}
 
 		if (xLabel > bounds.getWidth() - X_THRESHOLD_RIGHT) {
-			xLabel = bounds.getWidth() - X_MARGIN_RIGHT;
+			xLabel = bounds.getWidth() - X_MARGIN_RIGHT - bounds.getSafeAreaInsets().getRight();
 		}
 
 		double yLabel = bounds.toScreenCoordYd(y) + Y_GAP;
 		if (yLabel < Y_THRESHOLD_TOP) {
-			yLabel = Y_TOP_MARGIN;
+			yLabel = Y_TOP_MARGIN + bounds.getSafeAreaInsets().getTop();
 		} else if (yLabel > bounds.getHeight() - Y_THRESHOLD_BOTTOM) {
-			yLabel = bounds.getHeight() - Y_MARGIN_BOTTOM;
+			yLabel = bounds.getHeight() - Y_MARGIN_BOTTOM - bounds.getSafeAreaInsets().getBottom();
 		}
 
 		return new GPoint((int) xLabel, (int) yLabel);

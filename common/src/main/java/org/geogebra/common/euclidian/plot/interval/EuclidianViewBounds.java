@@ -1,5 +1,6 @@
 package org.geogebra.common.euclidian.plot.interval;
 
+import org.geogebra.common.gui.EdgeInsets;
 import org.geogebra.common.kernel.interval.Interval;
 
 public interface EuclidianViewBounds {
@@ -112,4 +113,9 @@ public interface EuclidianViewBounds {
 	 * @return if interval y is within the bounds.
 	 */
 	boolean isOnView(Interval y);
+
+	/** Get the safe area
+	 * @return safe area
+	 */
+	EdgeInsets getSafeAreaInsets();
 }
