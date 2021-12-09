@@ -372,8 +372,9 @@ public class EuclidianOptionsModel {
 
 		listener.updateBackgroundColor(getBackgroundColor());
 		EuclidianSettings es = view.getSettings();
+		boolean isBold = app.isWhiteboardActive() ? es.isRulerBold() : es.getGridIsBold();
 		listener.updateRuler(es.getBackgroundType().value(), es.getBgRulerColor(),
-				es.getRulerLineStyle(), es.isRulerBold());
+				es.getRulerLineStyle(), isBold);
 		int ind = view.getAllowToolTips();
 		int idx = -1;
 
