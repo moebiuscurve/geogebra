@@ -95,6 +95,11 @@ public class ViewAltTexts {
 		return false;
 	}
 
+	/**
+	 *
+	 * @param geo to check
+	 * @return if this geo is independent for all altText of views or not.
+	 */
 	public boolean isIndependent(GeoNumeric geo) {
 		updateVisibleViews();
 		for (int i = 0; i < viewCount(); i++) {
